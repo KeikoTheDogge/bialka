@@ -1,5 +1,4 @@
 from fastapi import FastAPI, Depends
-from fastapi.responses import PlainTextResponse
 from schemas import ProteinCreate
 from models import Protein
 from sqlalchemy.orm import Session
@@ -18,20 +17,18 @@ async def say_hello(name: str):
     return {"message": f"Hello {name}"}
 
 
-@app.post("/proteins", response_class=PlainTextResponse)
+@app.post("/proteins")
 async def create_protein(protein: ProteinCreate, db: Session = Depends(get_db)):
     new_protein = Protein(
         name=protein.name,
         gene_symbol=protein.gene_symbol,
         sequence=protein.sequence,
-        molecular_weight=protein.molecular_weight,
-        isoelectric_point=protein.isoelectric_point,
-        organizm=protein.organizm,
+        amino_acid=protein.amino_acid,
+        organism=protein.organism,
         function=protein.function,
-        localization=protein.localization,
-        expression_level=protein.expression_level
+        localization=protein.localization
     )
     db.add(new_protein)
     db.commit()
     db.refresh(new_protein)
-    return f'protien successfully added to database! you awesome!'
+    return new_protein

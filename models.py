@@ -8,10 +8,7 @@ class Protein(Base):
     name = Column(String(50)) # ograniczam ilosc znakow bo to fancy
     gene_symbol = Column(String(10))
     sequence = Column(Text)
-    molecular_weight = Column(Float)
-    isoelectric_point = Column(Float)
-    organizm = Column(String(50))
+    amino_acid = Column(Integer)
+    organism = Column(String(50))
     function = Column(Text)
     localization = Column(String(10))
-    expression_level = Column(String(50))
-    date_added = Column(TIMESTAMP)
