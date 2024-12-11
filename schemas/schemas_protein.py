@@ -1,9 +1,10 @@
 from pydantic import BaseModel
+from typing import Optional
 
 class ProteinBase(BaseModel):
     name: str
     gene_symbol: str
-    sequence: str
+    sequence: Optional[str] = None
     amino_acid: int
     organism: str
     function: str
@@ -21,7 +22,7 @@ class ProteinCreate(ProteinBase):
                 "amino_acid": "142",
                 "organism": "homo sapiens",
                 "function": "involved in oxygen transport from the lung to the various peripheral tissues",
-                "localization": "chromosom 16"
+                "localization": "chromosome 16"
             }
         }
 
