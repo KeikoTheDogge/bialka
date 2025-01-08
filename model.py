@@ -1,9 +1,6 @@
-from sqlalchemy import Column, \
-    Integer, \
-    String, \
-    Text, \
-    Enum
+from sqlalchemy import Column, Integer, String, Text, Boolean
 from db import Base
+
 
 class Protein(Base):
     __tablename__ = "protein"
@@ -16,7 +13,6 @@ class Protein(Base):
     organism = Column(String(50))
     function = Column(Text)
     localization = Column(String(20))
-    #maybe relationship in next iteration?
 
 
 class User(Base):
@@ -28,3 +24,4 @@ class User(Base):
     email = Column(String, unique=True, index=True)
     password = Column(String)
     workstation = Column(String) #change to enum in next iteration
+    disabled = Column(Boolean) #user can be active or not

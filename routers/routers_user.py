@@ -8,9 +8,7 @@ from functions.functions_user import create_user, \
     get_user, \
     get_user_by_email, \
     delete_user
-from schemas.schemas_user import UserCreate, \
-    User
-from typing import List
+from schemas.schemas_user import UserCreate, User
 
 router = APIRouter(
     prefix="/users",

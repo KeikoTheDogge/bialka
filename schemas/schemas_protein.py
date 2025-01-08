@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 from typing import Optional
 
+
 class ProteinBase(BaseModel):
     name: str
     gene_symbol: str
@@ -9,6 +10,7 @@ class ProteinBase(BaseModel):
     organism: str
     function: str
     localization: str
+
 
 class ProteinCreate(ProteinBase):
     pass
@@ -25,6 +27,7 @@ class ProteinCreate(ProteinBase):
                 "localization": "chromosome 16"
             }
         }
+
 
 class Protein(ProteinBase):
     id: int

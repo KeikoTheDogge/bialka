@@ -1,10 +1,13 @@
 from pydantic import BaseModel
 
+
 class UserBase(BaseModel):
     name: str
     username: str
     email: str
     workstation: str
+    disabled: bool
+
 
 class UserCreate(UserBase):
     password: str
@@ -19,6 +22,7 @@ class UserCreate(UserBase):
                 "workstation": "Student/PhD/Academic Worker/Professor/Other"
             }
         }
+
 
 class User(UserBase):
     id: int

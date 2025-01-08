@@ -14,7 +14,3 @@ wystawienie krótkiego raportu z działania aplikacji.
 
 * Strona localhost:8000/ - "message: Application alive and healthy"
 * Strona localhost:8000/docs - interaktywna dokumentacja za pomocą której możena testować endpointy
-
-## Ważne
-
-W budowie jest grupa postmanowa która również będzie zezwalała na testowanie endpointów. 
