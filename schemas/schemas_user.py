@@ -6,7 +6,6 @@ class UserBase(BaseModel):
     username: str
     email: str
     workstation: str
-    disabled: bool
 
 
 class UserCreate(UserBase):
@@ -19,13 +18,14 @@ class UserCreate(UserBase):
                 "username": "kowalski",
                 "email": "kowalski@sample.com",
                 "password": "Password123@",
-                "workstation": "Student/PhD/Academic Worker/Professor/Other"
+                "workstation": "Student/PhD/Academic Worker/Professor/Other",
             }
         }
 
 
 class User(UserBase):
     id: int
+    disabled: bool
 
     class Config:
         from_attributes = True

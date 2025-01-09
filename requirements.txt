@@ -8,3 +8,5 @@ python-dotenv
 BIO
 python-multipart
 httpx
+pyjwt
+"passlib[bcrypt]"

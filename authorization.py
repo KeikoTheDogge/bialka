@@ -1,53 +1,27 @@
 from typing import Annotated
 from fastapi import Depends, HTTPException, status, APIRouter
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from schemas.schemas_user import UserCreate, User
+from schemas.schemas_user import User
+from functions.functions_user import get_user_by_username
+from sqlalchemy.orm import Session
+from dependency import get_db, hash_password
 
 router = APIRouter(
     prefix="/authorization",
     tags=["authorization"]
 )
 
-fake_users_db = {
-    "johndoe": {
-        "name": "John",
-        "username": "johndoe",
-        "email": "johndoe@example.com",
-        "password": "fakehashedpassword",
-        "workstation": "Student",
-        "disabled": False,
-    },
-    "alice": {
-        "name": "Alice",
-        "username": "alice",
-        "email": "alice@example.com",
-        "password": "fakehashedsecret2",
-        "workstation": "PhD",
-        "disabled": True,
-    },
-}
-
-
-def fake_has_password(password: str):
-    return "fakehashed" + password
-
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/authorization/token")
 
 
-def get_user(db, username: str):
-    if username in db:
-        user_dict = db[username]
-        return UserCreate(**user_dict)
-
-
-def fake_decode_token(token):
-    user = get_user(fake_users_db, token)
+def fake_decode_token(token, db: Session):
+    user = get_user_by_username(db, token)
     return user
 
 
-async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
-    user = fake_decode_token(token)
+async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)], db: Session = Depends(get_db)):
+    user = fake_decode_token(token, db)
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -66,17 +40,14 @@ async def get_current_active_user(
 
 
 @router.post("/token")
-async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
-    user_dict = fake_users_db.get(form_data.username)
+async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], db: Session = Depends(get_db)):
+    user_dict = get_user_by_username(db, form_data.username)
     if not user_dict:
         raise HTTPException(status_code=400, detail="Incorrect username or password")
-    user = UserCreate(**user_dict)
-    hashed_password = fake_has_password(form_data.password)
-    print(hashed_password, user.password)
-    if not hashed_password == user.password:
+    hashed_password = hash_password(form_data.password)
+    if not hashed_password == user_dict.password:
         raise HTTPException(status_code=400, detail="Incorrect username or password")
-
-    return {"access_token": user.username, "token_type": "bearer"}
+    return {"access_token": user_dict.username, "token_type": "bearer"}
 
 
 @router.get("/users/me")
