@@ -9,6 +9,8 @@ from functions.functions_user import create_user, \
     get_user_by_email, \
     delete_user
 from schemas.schemas_user import UserCreate, User
+from typing import Annotated
+from authorization import get_current_active_user
 
 router = APIRouter(
     prefix="/users",
@@ -17,7 +19,8 @@ router = APIRouter(
 
 
 @router.get("/")
-def read_users(db: Session = Depends(get_db)):
+def read_users(current_user: Annotated[User, Depends(get_current_active_user)],
+               db: Session = Depends(get_db)):
     """
     Get all users from database
     """
@@ -28,7 +31,8 @@ def read_users(db: Session = Depends(get_db)):
 
 
 @router.get("/{user_id}", response_model=User)
-def read_user_by_id(user_id: int, db: Session = Depends(get_db)):
+def read_user_by_id(current_user: Annotated[User, Depends(get_current_active_user)],
+                    user_id: int, db: Session = Depends(get_db)):
     """
     Get user by ID
     - **user_id**: user ID
@@ -56,7 +60,8 @@ def create_new_user(user: UserCreate, db: Session = Depends(get_db)):
 
 
 @router.delete("/{user_id}")
-def delete_users(user_id: int, db: Session = Depends(get_db)):
+def delete_users(current_user: Annotated[User, Depends(get_current_active_user)],
+                 user_id: int, db: Session = Depends(get_db)):
     """
     Delete user by ID
     - **user_id**: user ID

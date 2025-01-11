@@ -16,4 +16,8 @@ description = """
 * **POST protein/add_fasta/{protein_id}**: add fasta file to existing protein
 * **DELETE protein/{protein_id}**: delete protein by id
 
+## uniprot
+
+* **GET uniprot/{protein_id}** show all information about protein from uniprot database
+
 """

@@ -12,7 +12,9 @@ from functions.functions_protein import get_protein, \
     add_fasta_file, \
     delete_protein
 from schemas.schemas_protein import ProteinCreate
-
+from typing import Annotated
+from authorization import get_current_active_user
+from schemas.schemas_user import User
 
 router = APIRouter(
     prefix="/protein",
@@ -21,7 +23,8 @@ router = APIRouter(
 
 
 @router.get("/")
-def read_proteins(db: Session = Depends(get_db)):
+def read_proteins(current_user: Annotated[User, Depends(get_current_active_user)],
+                  db: Session = Depends(get_db)):
     """
     Get all proteins from database
     """
@@ -32,50 +35,32 @@ def read_proteins(db: Session = Depends(get_db)):
 
 
 @router.get("/{protein_id}")
-def read_protein(protein_id: int, db: Session = Depends(get_db)):
+def read_protein(current_user: Annotated[User, Depends(get_current_active_user)],
+                 protein_id: int, db: Session = Depends(get_db)):
     """
     Get protein by ID
     """
-    protein = get_protein(db, id=protein_id)
+    protein = get_protein(db, protein_id)
     if protein is None:
         raise HTTPException(status_code=404, detail="Protein not found")
     return protein
 
 
 @router.get("/{name}")
-def read_protein_by_name(name: str, db: Session = Depends(get_db)):
+def read_protein_by_name(current_user: Annotated[User, Depends(get_current_active_user)],
+                         name: str, db: Session = Depends(get_db)):
     """
     Get protein by name
     """
-    protein = get_protein_by_name(db, name=name)
+    protein = get_protein_by_name(db, name)
     if protein is None:
         raise HTTPException(status_code=404, detail="Protein not found")
     return protein
 
 
-# proba polaczenia w jedno, nie przechodzi przez postmana
-# @router.post("/")
-# async def create_new_user( protein: ProteinCreate, db: Session = Depends(get_db),
-#                      file: UploadFile = File(...)):
-#     existing_protein = get_protein_by_name(db, name=protein.name)
-#     if existing_protein:
-#         raise HTTPException(status_code=400, detail="Protein with this name already exists")
-#     if check_file(file) is False:
-#         raise HTTPException(status_code=400, detail="Invalid file type. Only FASTA files are allowed.")
-#     content = await file.read()
-#     try:
-#         fasta_str = content.decode("utf-8")
-#         fasta_records = list(SeqIO.parse(StringIO(fasta_str), "fasta"))
-#         if not fasta_records:
-#             raise HTTPException(status_code=400, detail="FASTA file is empty or invalid.")
-#         protein.sequence = str(fasta_records[0].seq)
-#     except Exception as e:
-#         raise HTTPException(status_code=400, detail=f"Error parsing FASTA file: {str(e)}")
-#     return create_protein(db=db, protein=protein)
-
-
 @router.post("/")
-async def create_new_user( protein: ProteinCreate, db: Session = Depends(get_db)):
+def create_new_protein(current_user: Annotated[User, Depends(get_current_active_user)],
+                       protein: ProteinCreate, db: Session = Depends(get_db)):
     """
     Create new protein
     - **amino_acid**: number of aminos in protein
@@ -83,14 +68,15 @@ async def create_new_user( protein: ProteinCreate, db: Session = Depends(get_db)
     - **gene_symbol**: protein gene symbol (eg. HBB)
     - **organism**: protein organism
     """
-    existing_protein = get_protein_by_name(db, name=protein.name)
+    existing_protein = get_protein_by_name(db, protein.name)
     if existing_protein:
         raise HTTPException(status_code=400, detail="Protein with this name already exists")
     return create_protein(db=db, protein=protein)
 
 
 @router.post("/add_fasta/{protein_id}")
-def upload_fasta_endpoint(protein_id: int, file: UploadFile = File(...), db: Session = Depends(get_db)):
+def upload_fasta_endpoint(current_user: Annotated[User, Depends(get_current_active_user)],
+                          protein_id: int, file: UploadFile = File(...), db: Session = Depends(get_db)):
     """
     Add fasta file to protein
     - **protein_id**: protein ID
@@ -100,7 +86,8 @@ def upload_fasta_endpoint(protein_id: int, file: UploadFile = File(...), db: Ses
 
 
 @router.delete("/{protein_id}")
-def delete_proteins(protein_id: int, db: Session = Depends(get_db)):
+def delete_proteins(current_user: Annotated[User, Depends(get_current_active_user)],
+                    protein_id: int, db: Session = Depends(get_db)):
     """
     Delete protein from database
     - **protein_id**: protein ID

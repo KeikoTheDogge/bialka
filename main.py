@@ -19,4 +19,4 @@ app.include_router(authorization.router)
 
 @app.get("/")
 async def root():
-    return {"message": "Main page"}
+    return {"message": "App is alive and healthy"}

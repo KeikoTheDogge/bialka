@@ -10,3 +10,4 @@ python-multipart
 httpx
 pyjwt
 "passlib[bcrypt]"
+passlib

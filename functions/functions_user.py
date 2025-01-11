@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from model import User
 from schemas.schemas_user import UserCreate
-from dependency import hash_password
+from dependency import get_password_hash
 
 
 def get_users(db: Session):
@@ -21,7 +21,7 @@ def get_user(db: Session, user_id: int):
 
 
 def create_user(db: Session, user: UserCreate):
-    hashed_pass = hash_password(user.password)
+    hashed_pass = get_password_hash(user.password)
     db_user = User(
         name=user.name,
         username=user.username,

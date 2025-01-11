@@ -8,19 +8,38 @@ from io import StringIO
 
 
 def get_proteins(db: Session):
+    """
+    Get all proteins from database
+    """
     return db.query(Protein).all()
 
 
 def get_protein(db: Session, protein_id: int):
+    """
+    Get protein from database with given id
+    :param protein_id: protein id
+    :return: information about protein
+    """
     return db.query(Protein).filter(Protein.id == protein_id).first()
 
 
 def get_protein_by_name(db: Session, protein_name: str):
+    """
+    Get protein by name
+    :param db: session with database
+    :param protein_name: protein name
+    :return: information about protein
+    """
     return db.query(Protein).filter(Protein.name == protein_name).first()
 
 
-# TODO: add exceptions
 def create_protein(db: Session, protein: ProteinCreate):
+    """
+    Create new protein
+    :param db: session with db
+    :param protein: information about new protein
+    :return: added information about new protein
+    """
     new_protein = Protein(
         name=protein.name,
         gene_symbol=protein.gene_symbol,
@@ -37,6 +56,13 @@ def create_protein(db: Session, protein: ProteinCreate):
 
 
 def add_fasta_file(db: Session, protein_id: int, file: UploadFile):
+    """
+    Add fasta file to existing protein
+    :param db: session with db
+    :param protein_id: protein id
+    :param file: fasta file
+    :return: 200 if ok, 404 if protein not found, 400 if file is empty or invalid and error while parsing file
+    """
     protein = db.query(Protein).filter(Protein.id == protein_id).first()
     if not protein:
         raise HTTPException(status_code=404, detail="Protein not found")
@@ -57,6 +83,12 @@ def add_fasta_file(db: Session, protein_id: int, file: UploadFile):
 
 
 def delete_protein(db: Session, protein_id: int):
+    """
+    Delete protein from database
+    :param db: session with database
+    :param protein_id: protein id
+    :return: deleted protein
+    """
     db_protein = get_protein(db, protein_id)
     db.delete(db_protein)
     db.commit()

@@ -12,5 +12,5 @@ wystawienie krótkiego raportu z działania aplikacji.
 
 ## Użycie
 
-* Strona localhost:8000/ - "message: Application alive and healthy"
+* Strona localhost:8000/ - "message: App is alive and healthy"
 * Strona localhost:8000/docs - interaktywna dokumentacja za pomocą której możena testować endpointy
