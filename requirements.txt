@@ -9,5 +9,5 @@ BIO
 python-multipart
 httpx
 pyjwt
-"passlib[bcrypt]"
+passlib[bcrypt]
 passlib
