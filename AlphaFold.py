@@ -3,6 +3,8 @@ import httpx
 from authorization import get_current_active_user
 from schemas.schemas_user import User
 from typing import Annotated
+from dotenv import load_dotenv
+import os
 
 router = APIRouter(
     prefix="/AlphaFold",
@@ -10,7 +12,7 @@ router = APIRouter(
 )
 
 
-API_KEY = "AIzaSyCeurAJz7ZGjPQUtEaerUkBZ3TaBkXrY94"
+API_KEY = os.getenv("API_KEY")
 
 
 @router.get("/prediction/{qualifier}")
