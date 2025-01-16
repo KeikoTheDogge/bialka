@@ -18,6 +18,11 @@ description = """
 
 ## uniprot
 
-* **GET uniprot/{protein_id}** show all information about protein from uniprot database
+* **GET uniprot/id/{protein_id}** show all information about protein from uniprot database
+* **GET uniprot/name/{protein_name}** show all information about protein from uniprot database
 
+## AlphaFold
+
+* **GET AlphaFold/prediction/{qualifier}** information about protein structures predicted by AlphaFold such as mmCIF, bCIF and PDB
+* **GET /AlphaFold/uniprot_information/summary/{qualifier}** summary information about protein from uniprot
 """

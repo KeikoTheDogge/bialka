@@ -4,7 +4,7 @@ from routers import routers_protein
 from routers import routers_user
 from routers import routers_uniprot
 from docs import description
-
+import AlphaFold
 
 app = FastAPI(
     title="Backend",
@@ -16,6 +16,8 @@ app.include_router(routers_protein.router)
 app.include_router(routers_user.router)
 app.include_router(routers_uniprot.router)
 app.include_router(authorization.router)
+app.include_router(AlphaFold.router)
+
 
 @app.get("/")
 async def root():
