@@ -23,5 +23,5 @@ class User(Base):
     username = Column(String, unique=True)
     email = Column(String, unique=True, index=True)
     password = Column(String)
-    workstation = Column(String) #change to enum in next iteration
-    disabled = Column(Boolean, default=False) #user can be active or not
+    workstation = Column(String)
+    disabled = Column(Boolean, default=False)
