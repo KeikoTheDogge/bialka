@@ -45,3 +45,4 @@ greenlet~=3.1.1
 pyparsing~=3.2.1
 zipp~=3.21.0
 muscle~=0.0.4
+Bio
